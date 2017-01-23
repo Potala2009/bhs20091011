@@ -1,10 +1,27 @@
 <?php
+/* ---------------------------------------------------- */
+/* 程序名称: PHP探针-Yahei
+/* 程序功能: 探测系统的Web服务器运行环境
+/* 程序开发: Yahei.Net
+/* 联系方式: info@Yahei.net
+/* Date: 1970-01-01 / 2012-07-08
+/* ---------------------------------------------------- */
+/* 使用条款:
+/* 1.该软件免费使用.
+/* 2.禁止任何衍生版本.
+/* ---------------------------------------------------- */
+/* 感谢以下朋友为探针做出的贡献:
+/* zyypp,酷を龙卷风,龙智超,菊花肿了,闲人,Clare Lou,hotsnow
+/* 二戒,yexinzhu,wangyu1314,Kokgog,gibyasus,黃子珅,A大,huli
+/* 小松,charwin,华景网络
+/* 您可能是下一个?
+/* ---------------------------------------------------- */
 error_reporting(0); //抑制所有错误信息
 @header("content-Type: text/html; charset=utf-8"); //语言强制
 ob_start();
 date_default_timezone_set('Asia/Shanghai');//此句用于消除时间差
 
-$title = '强人数据';
+$title = '雅黑PHP探针[简体版]';
 
 $version = "v0.4.7"; //版本号
 
@@ -964,9 +981,9 @@ if ($_GET['act'] == "rt")
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<link rel="icon" type="image/ico" href="https://qiangidc.github.io/bhs10201010/storage/images/favicon.ico">
-<title>AHS202010XX</title>
+<title><?php echo $title.$version; ?></title>
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -1155,7 +1172,7 @@ function displayData(dataJSON)
 	
 	<table>
 		<tr>
-			<th class="w_logo">QIANGREN.NET</th>
+			<th class="w_logo">雅黑PHP探针</th>
 			<th class="w_top"><a href="#w_php">PHP参数</a></th>
 			<th class="w_top"><a href="#w_module">组件支持</a></th>
 			<th class="w_top"><a href="#w_module_other">第三方组件</a></th>
@@ -1165,6 +1182,7 @@ function displayData(dataJSON)
 			<th class="w_top"><a href="#w_MySQL">MySQL检测</a></th>
 			<th class="w_top"><a href="#w_function">函数检测</a></th>
 			<th class="w_top"><a href="#w_mail">邮件检测</a></th>
+			<th class="w_top"><a href="http://www.yahei.net/tz/tz.zip">探针下载</a></th>
 		</tr>
 	</table>
 
@@ -1612,4 +1630,677 @@ foreach ($able as $key=>$value) {
 
     <td><?php echo show("allow_url_fopen");?></td>
 
-    <td>?%2
+    <td>声明argv和argc变量（register_argc_argv）：</td>
+
+    <td><?php echo show("register_argc_argv");?></td>
+
+  </tr>
+  <tr>
+    <td>Cookie 支持：</td>
+    <td><?php echo isset($_COOKIE)?'<font color="green">√</font>' : '<font color="red">×</font>';?></td>
+    <td>拼写检查（ASpell Library）：</td>
+    <td><?php echo isfun("aspell_check_raw");?></td>
+  </tr>
+   <tr>
+    <td>高精度数学运算（BCMath）：</td>
+    <td><?php echo isfun("bcadd");?></td>
+    <td>PREL相容语法（PCRE）：</td>
+    <td><?php echo isfun("preg_match");?></td>
+   <tr>
+    <td>PDF文档支持：</td>
+    <td><?php echo isfun("pdf_close");?></td>
+    <td>SNMP网络管理协议：</td>
+    <td><?php echo isfun("snmpget");?></td>
+  </tr> 
+   <tr>
+    <td>VMailMgr邮件处理：</td>
+    <td><?php echo isfun("vm_adduser");?></td>
+    <td>Curl支持：</td>
+    <td><?php echo isfun("curl_init");?></td>
+  </tr> 
+   <tr>
+    <td>SMTP支持：</td>
+    <td><?php echo get_cfg_var("SMTP")?'<font color="green">√</font>' : '<font color="red">×</font>';?></td>
+    <td>SMTP地址：</td>
+    <td><?php echo get_cfg_var("SMTP")?get_cfg_var("SMTP"):'<font color="red">×</font>';?></td>
+  </tr> 
+
+	<tr>
+		<td>默认支持函数（enable_functions）：</td>
+		<td colspan="3"><a href='<?php echo $phpSelf;?>?act=Function' target='_blank' class='static'>请点这里查看详细！</a></td>		
+	</tr>
+	<tr>
+		<td>被禁用的函数（disable_functions）：</td>
+		<td colspan="3" class="word">
+<?php 
+$disFuns=get_cfg_var("disable_functions");
+if(empty($disFuns))
+{
+	echo '<font color=red>×</font>';
+}
+else
+{ 
+	//echo $disFuns;
+	$disFuns_array =  explode(',',$disFuns);
+	foreach ($disFuns_array as $key=>$value) 
+	{
+		if ($key!=0 && $key%5==0) {
+			echo '<br />';
+	}
+	echo "$value&nbsp;&nbsp;";
+}	
+}
+
+?>
+		</td>
+	</tr>
+
+</table>
+
+<a name="w_module"></a>
+
+<!--组件信息-->
+
+<table>
+
+  <tr><th colspan="4" >组件支持</th></tr>
+
+  <tr>
+
+    <td width="32%">FTP支持：</td>
+
+    <td width="18%"><?php echo isfun("ftp_login");?></td>
+
+    <td width="32%">XML解析支持：</td>
+
+    <td width="18%"><?php echo isfun("xml_set_object");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>Session支持：</td>
+
+    <td><?php echo isfun("session_start");?></td>
+
+    <td>Socket支持：</td>
+
+    <td><?php echo isfun("socket_accept");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>Calendar支持</td>
+
+    <td><?php echo isfun('cal_days_in_month');?>
+	</td>
+
+    <td>允许URL打开文件：</td>
+
+    <td><?php echo show("allow_url_fopen");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>GD库支持：</td>
+
+    <td>
+
+    <?php
+
+        if(function_exists(gd_info)) {
+
+            $gd_info = @gd_info();
+
+	        echo $gd_info["GD Version"];
+
+	    }else{echo '<font color="red">×</font>';}
+
+	?></td>
+
+    <td>压缩文件支持(Zlib)：</td>
+
+    <td><?php echo isfun("gzclose");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>IMAP电子邮件系统函数库：</td>
+
+    <td><?php echo isfun("imap_close");?></td>
+
+    <td>历法运算函数库：</td>
+
+    <td><?php echo isfun("JDToGregorian");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>正则表达式函数库：</td>
+
+    <td><?php echo isfun("preg_match");?></td>
+
+    <td>WDDX支持：</td>
+
+    <td><?php echo isfun("wddx_add_vars");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>Iconv编码转换：</td>
+
+    <td><?php echo isfun("iconv");?></td>
+
+    <td>mbstring：</td>
+
+    <td><?php echo isfun("mb_eregi");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>高精度数学运算：</td>
+
+    <td><?php echo isfun("bcadd");?></td>
+
+    <td>LDAP目录协议：</td>
+
+    <td><?php echo isfun("ldap_close");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>MCrypt加密处理：</td>
+
+    <td><?php echo isfun("mcrypt_cbc");?></td>
+
+    <td>哈稀计算：</td>
+
+    <td><?php echo isfun("mhash_count");?></td>
+
+  </tr>
+
+</table>
+
+<a name="w_module_other"></a>
+<!--第三方组件信息-->
+<table>
+  <tr><th colspan="4" >第三方组件</th></tr>
+  <tr>
+    <td width="32%">Zend版本</td>
+    <td width="18%"><?php $zend_version = zend_version();if(empty($zend_version)){echo '<font color=red>×</font>';}else{echo $zend_version;}?></td>
+    <td width="32%">
+<?php
+$PHP_VERSION = PHP_VERSION;
+$PHP_VERSION = substr($PHP_VERSION,2,1);
+if($PHP_VERSION > 2)
+{
+	echo "ZendGuardLoader[启用]";
+}
+else
+{
+	echo "Zend Optimizer";
+}
+?>
+	</td>
+    <td width="18%"><?php if($PHP_VERSION > 2){echo (get_cfg_var("zend_loader.enable"))?'<font color=green>√</font>':'<font color=red>×</font>';} else{if(function_exists('zend_optimizer_version')){	echo zend_optimizer_version();}else{	echo (get_cfg_var("zend_optimizer.optimization_level")||get_cfg_var("zend_extension_manager.optimizer_ts")||get_cfg_var("zend.ze1_compatibility_mode")||get_cfg_var("zend_extension_ts"))?'<font color=green>√</font>':'<font color=red>×</font>';}}?></td>
+  </tr>
+  <tr>
+    <td>eAccelerator</td>
+    <td><?php if((phpversion('eAccelerator'))!=''){echo phpversion('eAccelerator');}else{ echo "<font color=red>×</font>";} ?></td>
+    <td>ioncube</td>
+    <td><?php if(extension_loaded('ionCube Loader')){   $ys = ioncube_loader_iversion();   $gm = ".".(int)substr($ys,3,2);   echo ionCube_Loader_version().$gm;}else{echo "<font color=red>×</font>";}?></td>
+  </tr>
+  <tr>
+    <td>XCache</td>
+    <td><?php if((phpversion('XCache'))!=''){echo phpversion('XCache');}else{ echo "<font color=red>×</font>";} ?></td>
+    <td>APC</td>
+    <td><?php if((phpversion('APC'))!=''){echo phpversion('APC');}else{ echo "<font color=red>×</font>";} ?></td>
+  </tr>
+</table>
+
+<a name="w_db"></a>
+
+<!--数据库支持-->
+
+<table>
+
+  <tr><th colspan="4">数据库支持</th></tr>
+
+  <tr>
+
+    <td width="32%">MySQL 数据库：</td>
+
+    <td width="18%"><?php echo isfun("mysql_close");?>
+
+    <?php
+    if(function_exists("mysql_get_server_info")) {
+
+        $s = @mysql_get_server_info();
+
+        $s = $s ? '&nbsp; mysql_server 版本：'.$s : '';
+
+	    $c = '&nbsp; mysql_client 版本：'.@mysql_get_client_info();
+
+        echo $s;
+
+    }
+
+    ?>
+
+	</td>
+
+    <td width="32%">ODBC 数据库：</td>
+
+    <td width="18%"><?php echo isfun("odbc_close");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>Oracle 数据库：</td>
+
+    <td><?php echo isfun("ora_close");?></td>
+
+    <td>SQL Server 数据库：</td>
+
+    <td><?php echo isfun("mssql_close");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>dBASE 数据库：</td>
+
+    <td><?php echo isfun("dbase_close");?></td>
+
+    <td>mSQL 数据库：</td>
+
+    <td><?php echo isfun("msql_close");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>SQLite 数据库：</td>
+
+    <td><?php if(extension_loaded('sqlite3')) {$sqliteVer = SQLite3::version();echo '<font color=green>√</font>　';echo "SQLite3　Ver ";echo $sqliteVer[versionString];}else {echo isfun("sqlite_close");if(isfun("sqlite_close") == '<font color="green">√</font>') {echo "&nbsp; 版本： ".@sqlite_libversion();}}?></td>
+
+    <td>Hyperwave 数据库：</td>
+
+    <td><?php echo isfun("hw_close");?></td>
+
+  </tr>
+
+  <tr>
+
+    <td>Postgre SQL 数据库：</td>
+
+    <td><?php echo isfun("pg_close"); ?></td>
+
+    <td>Informix 数据库：</td>
+
+    <td><?php echo isfun("ifx_close");?></td>
+
+  </tr>
+  <tr>
+    <td>DBA 数据库：</td>
+    <td><?php echo isfun("dba_close");?></td>
+    <td>DBM 数据库：</td>
+    <td><?php echo isfun("dbmclose");?></td>
+  </tr>    
+  <tr>
+    <td>FilePro 数据库：</td>
+    <td><?php echo isfun("filepro_fieldcount");?></td>
+    <td>SyBase 数据库：</td>
+    <td><?php echo isfun("sybase_close");?></td>
+  </tr> 
+
+</table>
+
+<a name="w_performance"></a><a name="bottom"></a>
+
+<form action="<?php echo $_SERVER[PHP_SELF]."#bottom";?>" method="post">
+
+<!--服务器性能检测-->
+
+<table>
+
+  <tr><th colspan="5">服务器性能检测</th></tr>
+
+  <tr align="center">
+
+    <td width="19%">参照对象</td>
+
+    <td width="17%">整数运算能力检测<br />(1+1运算300万次)</td>
+
+    <td width="17%">浮点运算能力检测<br />(圆周率开平方300万次)</td>
+
+    <td width="17%">数据I/O能力检测<br />(读取10K文件1万次)</td>
+
+    <td width="30%">CPU信息</td>
+
+  </tr>
+  <tr align="center">
+    <td align="left">美国 LinodeVPS</td>
+    <td>0.357秒</td>
+    <td>0.802秒</td>
+    <td>0.023秒</td>
+    <td align="left">4 x Xeon L5520 @ 2.27GHz</td>
+  </tr> 
+
+  <tr align="center">
+
+    <td align="left">美国 PhotonVPS.com</td>
+
+    <td>0.431秒</td>
+
+    <td>1.024秒</td>
+
+    <td>0.034秒</td>
+
+    <td align="left">8 x Xeon E5520 @ 2.27GHz</td>
+
+  </tr>
+
+  <tr align="center">
+
+    <td align="left">德国 SpaceRich.com</td>
+
+    <td>0.421秒</td>
+
+    <td>1.003秒</td>
+
+    <td>0.038秒</td>
+
+    <td align="left">4 x Core i7 920 @ 2.67GHz</td>
+
+  </tr>
+
+  <tr align="center">
+
+    <td align="left">美国 RiZie.com</td>
+
+    <td>0.521秒</td>
+
+    <td>1.559秒</td>
+
+    <td>0.054秒</td>
+
+    <td align="left">2 x Pentium4 3.00GHz</td>
+
+  </tr>
+
+  <tr align="center">
+
+    <td align="left">埃及 CitynetHost.com</a></td>
+
+    <td>0.343秒</td>
+
+    <td>0.761秒</td>
+
+    <td>0.023秒</td>
+
+    <td align="left">2 x Core2Duo E4600 @ 2.40GHz</td>
+
+  </tr>
+
+  <tr align="center">
+
+    <td align="left">美国 IXwebhosting.com</td>
+
+    <td>0.535秒</td>
+
+    <td>1.607秒</td>
+
+    <td>0.058秒</td>
+
+    <td align="left">4 x Xeon E5530 @ 2.40GHz</td>
+
+  </tr>
+
+  <tr align="center">
+
+    <td>本台服务器</td>
+
+    <td><?php echo $valInt;?><br /><input class="btn" name="act" type="submit" value="整型测试" /></td>
+
+    <td><?php echo $valFloat;?><br /><input class="btn" name="act" type="submit" value="浮点测试" /></td>
+
+    <td><?php echo $valIo;?><br /><input class="btn" name="act" type="submit" value="IO测试" /></td>
+
+    <td></td>
+
+  </tr>
+
+</table>
+
+<input type="hidden" name="pInt" value="<?php echo $valInt;?>" />
+
+<input type="hidden" name="pFloat" value="<?php echo $valFloat;?>" />
+
+<input type="hidden" name="pIo" value="<?php echo $valIo;?>" />
+
+<a name="w_networkspeed"></a>
+<!--网络速度测试-->
+<table>
+	<tr><th colspan="3">网络速度测试</th></tr>
+  <tr>
+    <td width="19%" align="center"><input name="act" type="submit" class="btn" value="开始测试" />
+        <br />
+	向客户端传送1000k字节数据<br />
+	带宽比例按理想值计算
+	</td>
+    <td width="81%" align="center" >
+
+  <table align="center" width="550" border="0" cellspacing="0" cellpadding="0" >
+    <tr >
+    <td height="15" width="50">带宽</td>
+	<td height="15" width="50">1M</td>
+    <td height="15" width="50">2M</td>
+    <td height="15" width="50">3M</td>
+    <td height="15" width="50">4M</td>
+    <td height="15" width="50">5M</td>
+    <td height="15" width="50">6M</td>
+    <td height="15" width="50">7M</td>
+    <td height="15" width="50">8M</td>
+    <td height="15" width="50">9M</td>
+    <td height="15" width="50">10M</td>
+    </tr>
+   <tr>
+    <td colspan="11" class="suduk" ><table align="center" width="550" border="0" cellspacing="0" cellpadding="0" height="8" class="suduk">
+    <tr>
+      <td class="sudu"  width="<?php 
+	if(preg_match("/[^\d-., ]/",$speed))
+		{
+			echo "0";
+		}
+	else{
+			echo 550*($speed/11000);
+		} 
+		?>"></td>
+      <td class="suduk" width="<?php 
+	if(preg_match("/[^\d-., ]/",$speed))
+		{
+			echo "550";
+		}
+	else{
+			echo 550-550*($speed/11000);
+		} 
+		?>"></td>
+    </tr>
+    </table>
+   </td>
+  </tr>
+  </table>
+  <?php echo (isset($_GET['speed']))?"下载1000KB数据用时 <font color='#cc0000'>".$_GET['speed']."</font> 毫秒，下载速度："."<font color='#cc0000'>".$speed."</font>"." kb/s，需测试多次取平均值，超过10M直接看下载速度":"<font color='#cc0000'>&nbsp;未探测&nbsp;</font>" ?>
+
+    </td>
+  </tr>
+</table>
+
+<a name="w_MySQL"></a>
+
+<!--MySQL数据库连接检测-->
+
+<table>
+
+	<tr><th colspan="3">MySQL数据库连接检测</th></tr>
+
+  <tr>
+
+    <td width="15%"></td>
+
+    <td width="60%">
+
+      地址：<input type="text" name="host" value="localhost" size="10" />
+
+      端口：<input type="text" name="port" value="3306" size="10" />
+
+      用户名：<input type="text" name="login" size="10" />
+
+      密码：<input type="password" name="password" size="10" />
+
+    </td>
+
+    <td width="25%">
+
+      <input class="btn" type="submit" name="act" value="MySQL检测" />
+
+    </td>
+
+  </tr>
+
+</table>
+
+  <?php
+
+  if ($_POST['act'] == 'MySQL检测') {
+
+  	if(function_exists("mysql_close")==1) {
+
+  		$link = @mysql_connect($host.":".$port,$login,$password);
+
+  		if ($link){
+
+  			echo "<script>alert('连接到MySql数据库正常')</script>";
+
+  		} else {
+
+  			echo "<script>alert('无法连接到MySql数据库！')</script>";
+
+  		}
+
+  	} else {
+
+  		echo "<script>alert('服务器不支持MySQL数据库！')</script>";
+
+  	}
+
+  }
+
+	?>
+	
+<a name="w_function"></a>
+
+<!--函数检测-->
+
+<table>
+
+	<tr><th colspan="3">函数检测</th></tr>
+
+  <tr>
+
+    <td width="15%"></td>
+
+    <td width="60%">
+
+      请输入您要检测的函数：
+
+      <input type="text" name="funName" size="50" />
+
+    </td>
+
+    <td width="25%">
+
+      <input class="btn" type="submit" name="act" align="right" value="函数检测" />
+
+    </td>
+
+  </tr>
+
+  <?php
+
+  if ($_POST['act'] == '函数检测') {
+
+  	echo "<script>alert('$funRe')</script>";
+
+  }
+
+  ?>
+
+</table>
+
+<a name="w_mail"></a>
+
+<!--邮件发送检测-->
+
+<table>
+
+  <tr><th colspan="3">邮件发送检测</th></tr>
+
+  <tr>
+
+    <td width="15%"></td>
+
+    <td width="60%">
+
+      请输入您要检测的邮件地址：
+
+      <input type="text" name="mailAdd" size="50" />
+
+    </td>
+
+    <td width="25%">
+
+    <input class="btn" type="submit" name="act" value="邮件检测" />
+
+    </td>
+
+  </tr>
+
+  <?php
+
+  if ($_POST['act'] == '邮件检测') {
+
+  	echo "<script>alert('$mailRe')</script>";
+
+  }
+
+  ?>
+
+</table>
+
+</form>
+
+
+
+	<table>
+		<tr>
+			<td class="w_foot"><A HREF="http://www.Yahei.Net" target="_blank"><?php echo $title.$version;?></A></td>
+			<td class="w_foot"><?php $run_time = sprintf('%0.4f', microtime_float() - $time_start);?>Processed in <?php echo $run_time?> seconds. <?php echo memory_usage();?> memory usage.</td>
+			<td class="w_foot"><a href="#w_top">返回顶部</a></td>
+		</tr>
+	</table>
+
+</div>
+
+</body>
+
+</html>
