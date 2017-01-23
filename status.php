@@ -983,6 +983,7 @@ if ($_GET['act'] == "rt")
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
+<link rel="icon" type="image/ico" href="https://qiangidc.github.io/bhs10201010/storage/images/favicon.ico">
 <title><?php echo $title.$version; ?></title>
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 
