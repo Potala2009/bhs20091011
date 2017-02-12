@@ -4,7 +4,7 @@
 # 支持Python版本：2.6 to 3.5 (users of Python 2.4 and 2.5 may use 2.1.3 version)
 # 支持操作系统： Linux, Windows, OSX, Sun Solaris, FreeBSD, OpenBSD and NetBSD, both 32-bit and 64-bit architectures
 
-SERVER = "30101043.chs.qiangidc.org"
+SERVER = "30101042.chs.qiangidc.org"
 PORT = 35601
 USER = "BHS20201021"
 PASSWORD = "deab2b72043653e69cac57a3d1a1f6be"
